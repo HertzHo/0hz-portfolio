@@ -1861,7 +1861,11 @@ const imageAlbums=new Map();
 const scrollPositions=new Map(),desktopMedia=matchMedia('(min-width:961px)'),motionMedia=matchMedia('(prefers-reduced-motion:reduce)');
 document.documentElement.classList.toggle('touch-layout',navigator.maxTouchPoints>0||matchMedia('(hover:none)').matches);
 if('scrollRestoration' in history)history.scrollRestoration='manual';
-document.getElementById('rail-art').style.backgroundImage='url('+displayMediaSource(DATA.visuals.orbit,rail.clientWidth||320)+')';
+function ensureRailArt(){
+ if(!desktopMedia.matches&&!rail.classList.contains('mobile-open'))return;
+ const art=document.getElementById('rail-art');if(art.style.backgroundImage)return;
+ art.style.backgroundImage='url('+displayMediaSource(DATA.visuals.orbit,rail.clientWidth||320)+')';
+}
 
 function icon(type='arrow'){
  if(type==='home')return '<svg class="icon icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="miter" aria-hidden="true"><path d="m3 11 9-8 9 8M6 9v12h12V9M10 21v-7h4v7"/></svg>';
@@ -2257,7 +2261,7 @@ function toggleZoom(){const el=document.getElementById('image-canvas'),actual=el
 document.getElementById('image-close').onclick=()=>imageDialog.close();document.getElementById('image-zoom').onclick=toggleZoom;document.getElementById('large-image').onclick=toggleZoom;document.getElementById('image-prev').onclick=()=>showImage(imagePosition-1);document.getElementById('image-next').onclick=()=>showImage(imagePosition+1);
 imageDialog.addEventListener('close',()=>{syncBodyLock();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});});imageDialog.addEventListener('click',e=>{if(e.target===imageDialog||e.target===document.getElementById('image-canvas'))imageDialog.close();});
 function syncBodyLock(){document.body.style.overflow=(imageDialog.open||rail.classList.contains('mobile-open'))?'hidden':'';syncBackTop();}
-function syncRail(){const collapsed=document.body.classList.contains('rail-collapsed'),mobile=!desktopMedia.matches,t=document.getElementById('rail-toggle');t.setAttribute('aria-expanded',String(!collapsed));t.setAttribute('aria-label',collapsed?'展开导航栏':'收起导航栏');t.title=collapsed?'展开导航栏':'收起导航栏';rail.inert=mobile&&!rail.classList.contains('mobile-open');document.querySelector('.site-shell').inert=mobile&&rail.classList.contains('mobile-open');}
+function syncRail(){ensureRailArt();const collapsed=document.body.classList.contains('rail-collapsed'),mobile=!desktopMedia.matches,t=document.getElementById('rail-toggle');t.setAttribute('aria-expanded',String(!collapsed));t.setAttribute('aria-label',collapsed?'展开导航栏':'收起导航栏');t.title=collapsed?'展开导航栏':'收起导航栏';rail.inert=mobile&&!rail.classList.contains('mobile-open');document.querySelector('.site-shell').inert=mobile&&rail.classList.contains('mobile-open');}
 function openMobile(){mobileReturnFocus=document.activeElement;rail.classList.add('mobile-open');document.getElementById('mobile-backdrop').classList.add('visible');document.getElementById('menu-button').setAttribute('aria-expanded','true');syncRail();syncBodyLock();document.getElementById('rail-close').focus();}
 function closeMobile(restore=false){const wasOpen=rail.classList.contains('mobile-open');rail.classList.remove('mobile-open');document.getElementById('mobile-backdrop').classList.remove('visible');document.getElementById('menu-button').setAttribute('aria-expanded','false');syncRail();syncBodyLock();if(wasOpen&&restore&&mobileReturnFocus?.isConnected)mobileReturnFocus.focus({preventScroll:true});}
 try{document.body.classList.toggle('rail-collapsed',localStorage.getItem('0hz-rail-collapsed')==='true');}catch{}
