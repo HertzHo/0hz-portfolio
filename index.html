@@ -1738,7 +1738,7 @@ body[data-view=contact] .topbar-right{display:none!important}
 }
 
 /* R23 — compact shared navigation and a quieter, responsive studio overview.
-   Case covers, project spreads and the approved poster frames are unchanged. */
+   Case covers and project spreads are unchanged; poster refinements are scoped below. */
 
 /* Marks share optical sizing rather than an identical bounding-box width. */
 #content .clients-section .client-wall{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:0;margin:0}
@@ -1828,6 +1828,45 @@ body[data-view=contact] .topbar .topbar-right{display:none!important}
  .site-footer .footer-tag{transition:none}
 }
 
+/* Natural artwork proportions, packed in DOM order by the poster masonry controller. */
+#content #poster-gallery .poster-wall{--poster-row-gap:18px;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--poster-row-gap) 18px;grid-auto-flow:row;align-items:start}
+#content #poster-gallery .poster-wall.is-masonry{grid-auto-rows:1px;row-gap:0}
+#content #poster-gallery .poster-wall .poster-surface{height:auto;min-height:0;align-self:start;min-width:0}
+#content #poster-gallery .poster-wall .poster-caption{height:auto;min-height:0;gap:8px;margin-bottom:12px}
+#content #poster-gallery .poster-wall .poster-caption h3{font-size:19px;line-height:1.45;overflow-wrap:break-word}
+#content #poster-gallery .poster-wall :is(.poster-single,.carousel-viewport){width:100%;height:auto;min-height:0;aspect-ratio:var(--poster-ratio,3/4)}
+#content #poster-gallery .poster-wall :is(.carousel-slide,.art-view,.poster-single>.image-button){width:100%;height:100%;min-height:0}
+#content #poster-gallery .poster-wall .art-crop{width:100%;height:100%;max-width:100%}
+#content #poster-gallery .poster-wall .art-crop>img{max-width:none;max-height:none;object-fit:fill}
+#content #poster-gallery .poster-wall .poster-single>.poster-video{width:100%;height:100%;margin:0}
+#content #poster-gallery .poster-wall .poster-single video{width:100%;height:100%;object-fit:contain}
+#content #poster-gallery .poster-wall .single-card-foot{display:none}
+#content #poster-gallery .poster-wall .poster-surface:has(.poster-single){padding-bottom:14px}
+#content #poster-gallery .poster-wall .carousel-footer{height:36px;min-height:36px}
+@container canvas (min-width:1280px){
+ #content #poster-gallery .poster-wall{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@container canvas (max-width:900px){
+ #content #poster-gallery .poster-wall{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #content #poster-gallery .poster-wall .poster-caption h3{font-size:18px}
+}
+/* Two mobile columns keep the collection short without revealing adjacent slides. */
+@container canvas (max-width:600px){
+ #content #poster-gallery .poster-wall{--poster-row-gap:16px;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px}
+ #content #poster-gallery .poster-wall .poster-surface{padding:8px 8px 0}
+ #content #poster-gallery .poster-wall .poster-surface:has(.poster-single){padding-bottom:8px}
+ #content #poster-gallery .poster-wall .poster-caption{gap:6px;margin-bottom:10px}
+ #content #poster-gallery .poster-wall .card-tag{font-size:8px;padding:1px 4px;line-height:1.5}
+ #content #poster-gallery .poster-wall .poster-title-row{grid-template-columns:minmax(0,1fr) 13px;gap:5px}
+ #content #poster-gallery .poster-wall .poster-caption h3{font-size:clamp(12px,3.5cqw,16px);line-height:1.4;overflow-wrap:break-word}
+ #content #poster-gallery .poster-wall .collection-related .icon{width:13px;height:13px}
+ #content #poster-gallery .poster-wall .carousel-footer{height:36px;min-height:36px;gap:6px}
+ #content #poster-gallery .poster-wall .carousel-counter{font-size:8px;line-height:1.4}
+ #content #poster-gallery .poster-wall .carousel-controls{gap:0}
+ #content #poster-gallery .poster-wall .carousel-controls button{width:28px;height:32px;padding:7px;min-width:0}
+ #content #poster-gallery .poster-wall .carousel-controls .icon{width:14px;height:14px}
+}
+
 /* Retain the artwork's layout while waiting; never expose native broken-image text. */
 img[data-art]:not([data-media-state="ready"]),
 img[data-visual]:not([data-media-state="ready"]),
@@ -1835,7 +1874,7 @@ img[data-proof]:not([data-media-state="ready"]),
 img[data-studio-logo]:not([data-media-state="ready"]){visibility:hidden}
 </style><link rel="canonical" href="https://0hzstudio.cn/"><meta property="og:type" content="website"><meta property="og:title" content="0Hz Creative · 零赫兹创意设计"><meta property="og:description" content="零赫兹创意设计。为品牌、门店与内容团队提供品牌、平面、电商、数字设计与整合营销支持。"><meta property="og:url" content="https://0hzstudio.cn/"><meta property="og:image" content="https://0hzstudio.cn/0hz-portfolio-r15-assets/favicon-0hz.png"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="0Hz Creative · 零赫兹创意设计"><meta name="twitter:description" content="零赫兹创意设计。为品牌、门店与内容团队提供品牌、平面、电商、数字设计与整合营销支持。"><meta name="twitter:image" content="https://0hzstudio.cn/0hz-portfolio-r15-assets/favicon-0hz.png"><link rel="icon" type="image/png" href="./0hz-portfolio-r15-assets/favicon-0hz.png"><link rel="apple-touch-icon" href="./0hz-portfolio-r15-assets/favicon-0hz.png"></head><body><a class="skip-link" href="#content">跳转到正文</a>
 <aside class="sidebar" id="sidebar" aria-label="作品与合作导航"><div class="rail-art" id="rail-art" aria-hidden="true"></div><div class="brand-row"><a class="brand-lockup" href="#home" aria-label="0Hz Studio，返回首页"><span class="wordmark-zero">0Hz</span> <span class="wordmark-studio">STUDIO</span></a><button id="rail-toggle" class="rail-toggle" aria-label="收起导航栏" aria-controls="sidebar" aria-expanded="true"><svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 2h2v12H1zM9 3h2v2H9zM7 5h2v2H7zM5 7h9v2H5zM7 9h2v2H7zM9 11h2v2H9z"/></svg></button><button id="rail-close" class="rail-close" aria-label="关闭菜单"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg></button></div><div class="rail-body"><nav id="overview-nav" aria-label="工作室首页"></nav><div class="rail-label">作品 / Work</div><nav id="main-nav" aria-label="五类设计作品"></nav><div class="rail-label cooperation-label">合作 / Services</div><nav id="cooperation-nav" aria-label="设计合作方式"></nav></div><div class="sidebar-foot"><a href="#contact"><span class="foot-label">联系工作室</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><small>Independent design studio</small></div></aside><div class="mobile-backdrop" id="mobile-backdrop"></div>
-<div class="site-shell"><header class="topbar"><button class="menu-button" id="menu-button" aria-label="打开菜单" aria-controls="sidebar" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="breadcrumb-wrap"><span class="crumb-slashes">//</span><span id="breadcrumb">0Hz Creative</span></div><div class="topbar-right"><a class="topbar-cta" id="topbar-cta" href="#contact">联系工作室 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div></header><main id="content" tabindex="-1"></main><footer class="site-footer"><span class="copyright">© 2026 0Hz Creative</span><nav class="footer-links footer-offers" aria-label="设计合作入口"><a class="footer-tag" href="#pricing">设计报价 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a class="footer-tag" href="#monthly">设计包月 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></nav></footer></div>
+<div class="site-shell"><header class="topbar"><button class="menu-button" id="menu-button" aria-label="打开菜单" aria-controls="sidebar" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="breadcrumb-wrap"><span class="crumb-slashes">//</span><span id="breadcrumb">0Hz Creative</span></div><div class="topbar-right"><a class="topbar-cta" id="topbar-cta" href="#contact">联系工作室 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div></header><main id="content" tabindex="-1"></main><footer class="site-footer"><span class="copyright">© 2026 0Hz Creative. All rights reserved.</span><nav class="footer-links footer-offers" aria-label="设计合作入口"><a class="footer-tag" href="#pricing">设计报价 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a class="footer-tag" href="#monthly">设计包月 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></nav></footer></div>
 <dialog id="image-dialog" aria-label="作品大图" aria-describedby="large-caption">
  <div class="image-toolbar"><span id="image-counter"></span><button id="image-zoom" aria-pressed="false">原尺寸</button><button id="image-close" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg></button></div>
  <div class="image-canvas" id="image-canvas"><div id="image-stage"><img id="large-image" alt=""></div></div>
@@ -2192,8 +2231,81 @@ function loadCarouselImages(root,index,userInitiated=false){
 }
 let mediaResizePending=false;
 addEventListener('resize',()=>{if(mediaResizePending)return;mediaResizePending=true;requestAnimationFrame(()=>{mediaResizePending=false;document.querySelectorAll('img[srcset][data-art],img[srcset][data-visual]').forEach(img=>img.sizes=imageDisplayWidth(img)+'px');});},{passive:true});
+
+/* Only the poster collection uses natural-ratio masonry; case spreads keep their layout. */
+let posterMasonryObserver=null,posterMasonryFrame=0,posterMasonryEpoch=0,posterMasonrySizes=new WeakMap();
+const posterMasonryWalls=new Set();
+function resetPosterMasonry(){
+ posterMasonryEpoch++;posterMasonryObserver?.disconnect();posterMasonryObserver=null;
+ if(posterMasonryFrame)cancelAnimationFrame(posterMasonryFrame);posterMasonryFrame=0;
+ posterMasonryWalls.clear();posterMasonrySizes=new WeakMap();
+}
+function posterArtworkRatio(card){
+ const carousel=card.querySelector('[data-carousel]'),index=Number(carousel?.dataset.index||0);
+ const series=DATA.series?.find(s=>s.id===card.dataset.seriesId);
+ const poster=DATA.posters?.find(p=>p.id===card.dataset.posterId);
+ const item=series?.items[index%series.items.length]||poster;
+ let size=item?.kind==='video'?DATA.media[item.video]:item?.art?sizeOf(item):null;
+ if(!size?.width||!size?.height){
+  const slides=carousel?[...carousel.querySelectorAll('.carousel-slide')]:[];
+  const media=(slides[index]||card).querySelector('img[data-art],video');
+  size=media?.dataset.art?DATA.artworkSizes[media.dataset.art]:null;
+  if(!size?.width||!size?.height)size={width:Number(media?.getAttribute('width')),height:Number(media?.getAttribute('height'))};
+ }
+ return size?.width>0&&size?.height>0?size.width/size.height:3/4;
+}
+function setPosterArtworkRatio(card){
+ const ratio=String(posterArtworkRatio(card));
+ if(card.style.getPropertyValue('--poster-ratio')!==ratio)card.style.setProperty('--poster-ratio',ratio);
+}
+function layoutPosterMasonry(){
+ const updates=[];
+ for(const wall of posterMasonryWalls){
+  if(!wall.isConnected)continue;
+  const gap=Math.max(0,parseFloat(getComputedStyle(wall).getPropertyValue('--poster-row-gap'))||0);
+  for(const card of wall.children){
+   if(!card.matches('article.poster-entry')||!card.isConnected)continue;
+   const height=card.offsetHeight;if(height>0)updates.push([card,'span '+Math.ceil(height+gap)]);
+  }
+ }
+ /* Batch layout reads before grid writes; unchanged spans never create observer churn. */
+ for(const [card,span]of updates)if(card.style.gridRowEnd!==span)card.style.gridRowEnd=span;
+}
+function schedulePosterMasonry(){
+ if(posterMasonryFrame||!posterMasonryWalls.size)return;
+ const epoch=posterMasonryEpoch;
+ posterMasonryFrame=requestAnimationFrame(()=>{
+  if(epoch!==posterMasonryEpoch)return;posterMasonryFrame=0;layoutPosterMasonry();
+ });
+}
+function hydratePosterMasonry(scope=document){
+ const walls=[...scope.querySelectorAll('.poster-wall')];if(!walls.length)return;
+ if(!posterMasonryObserver&&typeof ResizeObserver==='function'){const epoch=posterMasonryEpoch;posterMasonryObserver=new ResizeObserver(entries=>{
+  if(epoch!==posterMasonryEpoch)return;
+  let changed=false;
+  for(const entry of entries){
+   const wall=posterMasonryWalls.has(entry.target),rect=entry.contentRect,previous=posterMasonrySizes.get(entry.target);
+   const next={width:rect.width,height:wall?0:rect.height};posterMasonrySizes.set(entry.target,next);
+   if(!previous||Math.abs(next.width-previous.width)>.5||Math.abs(next.height-previous.height)>.5)changed=true;
+  }
+  if(changed)schedulePosterMasonry();
+ });}
+ for(const wall of walls){
+  if(posterMasonryWalls.has(wall))continue;
+  posterMasonryWalls.add(wall);wall.classList.add('is-masonry');posterMasonryObserver?.observe(wall);
+  for(const card of wall.children)if(card.matches('article.poster-entry')){setPosterArtworkRatio(card);posterMasonryObserver?.observe(card);}
+ }
+ /* Establish the real wall height before render restores a deep reading position. */
+ layoutPosterMasonry();
+}
+function updatePosterMasonryForCarousel(root){
+ const card=root.closest('.poster-entry'),wall=card?.parentElement;
+ if(!card||!posterMasonryWalls.has(wall))return;
+ setPosterArtworkRatio(card);schedulePosterMasonry();
+}
+addEventListener('resize',schedulePosterMasonry,{passive:true});
 async function render(){
- const seq=++revision;resetMediaLoading();window.portfolioReady=false;activeCase=null;
+ const seq=++revision;resetPosterMasonry();resetMediaLoading();window.portfolioReady=false;activeCase=null;
  const parts=decodeURIComponent(location.hash.slice(1)||'home').split('/');
  if(parts[0]==='case'&&DATA.caseAliases?.[parts[1]]){parts[1]=DATA.caseAliases[parts[1]];history.replaceState(null,'','#'+parts.join('/'));}
  const hash=parts.join('/');let view='home',category=null,anchor=null,context=null;
@@ -2209,7 +2321,7 @@ async function render(){
  navigation(view,category);closeMobile(false);if(imageDialog.open)imageDialog.close();addHoverFrames();window.scrollTo({top:0,behavior:'instant'});content.focus({preventScroll:true});
  if(anchor)document.getElementById(anchor)?.scrollIntoView({block:'start',behavior:'instant'});else scrollTo({top:targetY,behavior:'instant'});
  hydrate(document);if(seq!==revision)return;
- if(view==='monthly')updateCalculator();hydrateCarousels();
+ if(view==='monthly')updateCalculator();hydrateCarousels();hydratePosterMasonry(document);
  window.currentRoute={view,category,caseId:activeCase?.id||null,context,anchor};window.portfolioReady=true;
  if(anchor)document.getElementById(anchor)?.scrollIntoView({block:'start',behavior:'instant'});else scrollTo({top:targetY,behavior:'instant'});syncBackTop();
 }
@@ -2230,6 +2342,7 @@ function updateOriginalCarousel(root,index,scroll=false){
  root.querySelectorAll('[data-carousel-index]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===n)));
  slides.forEach((slide,i)=>{slide.inert=i!==n;slide.setAttribute('aria-hidden',String(i!==n));if(root.classList.contains('peek-carousel')){let delta=(i-n+slides.length)%slides.length;if(delta>slides.length/2)delta-=slides.length;slide.dataset.offset=delta;slide.style.setProperty('--offset',delta);slide.style.visibility=Math.abs(delta)>2?'hidden':'visible';}});
  if(scroll&&!root.classList.contains('peek-carousel'))track.scrollTo({left:n*track.clientWidth,behavior:motionMedia.matches?'instant':'smooth'});
+ updatePosterMasonryForCarousel(root);
 }
 function updateCarousel(root,index,scroll=false){
  if(!root.closest('.poster-wall'))return updateOriginalCarousel(root,index,scroll);
