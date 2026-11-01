@@ -1827,6 +1827,12 @@ body[data-view=contact] .topbar .topbar-right{display:none!important}
 @media(prefers-reduced-motion:reduce){
  .site-footer .footer-tag{transition:none}
 }
+
+/* Retain the artwork's layout while waiting; never expose native broken-image text. */
+img[data-art]:not([data-media-state="ready"]),
+img[data-visual]:not([data-media-state="ready"]),
+img[data-proof]:not([data-media-state="ready"]),
+img[data-studio-logo]:not([data-media-state="ready"]){visibility:hidden}
 </style><link rel="canonical" href="https://0hzstudio.cn/"><meta property="og:type" content="website"><meta property="og:title" content="0Hz Creative · 零赫兹创意设计"><meta property="og:description" content="零赫兹创意设计。为品牌、门店与内容团队提供品牌、平面、电商、数字设计与整合营销支持。"><meta property="og:url" content="https://0hzstudio.cn/"><meta property="og:image" content="https://0hzstudio.cn/0hz-portfolio-r15-assets/favicon-0hz.png"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="0Hz Creative · 零赫兹创意设计"><meta name="twitter:description" content="零赫兹创意设计。为品牌、门店与内容团队提供品牌、平面、电商、数字设计与整合营销支持。"><meta name="twitter:image" content="https://0hzstudio.cn/0hz-portfolio-r15-assets/favicon-0hz.png"><link rel="icon" type="image/png" href="./0hz-portfolio-r15-assets/favicon-0hz.png"><link rel="apple-touch-icon" href="./0hz-portfolio-r15-assets/favicon-0hz.png"></head><body><a class="skip-link" href="#content">跳转到正文</a>
 <aside class="sidebar" id="sidebar" aria-label="作品与合作导航"><div class="rail-art" id="rail-art" aria-hidden="true"></div><div class="brand-row"><a class="brand-lockup" href="#home" aria-label="0Hz Studio，返回首页"><span class="wordmark-zero">0Hz</span> <span class="wordmark-studio">STUDIO</span></a><button id="rail-toggle" class="rail-toggle" aria-label="收起导航栏" aria-controls="sidebar" aria-expanded="true"><svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 2h2v12H1zM9 3h2v2H9zM7 5h2v2H7zM5 7h9v2H5zM7 9h2v2H7zM9 11h2v2H9z"/></svg></button><button id="rail-close" class="rail-close" aria-label="关闭菜单"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg></button></div><div class="rail-body"><nav id="overview-nav" aria-label="工作室首页"></nav><div class="rail-label">作品 / Work</div><nav id="main-nav" aria-label="五类设计作品"></nav><div class="rail-label cooperation-label">合作 / Services</div><nav id="cooperation-nav" aria-label="设计合作方式"></nav></div><div class="sidebar-foot"><a href="#contact"><span class="foot-label">联系工作室</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><small>Independent design studio</small></div></aside><div class="mobile-backdrop" id="mobile-backdrop"></div>
 <div class="site-shell"><header class="topbar"><button class="menu-button" id="menu-button" aria-label="打开菜单" aria-controls="sidebar" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="breadcrumb-wrap"><span class="crumb-slashes">//</span><span id="breadcrumb">0Hz Creative</span></div><div class="topbar-right"><a class="topbar-cta" id="topbar-cta" href="#contact">联系工作室 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div></header><main id="content" tabindex="-1"></main><footer class="site-footer"><span class="copyright">© 2026 0Hz Creative</span><nav class="footer-links footer-offers" aria-label="设计合作入口"><a class="footer-tag" href="#pricing">设计报价 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a class="footer-tag" href="#monthly">设计包月 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a></nav></footer></div>
@@ -2065,7 +2071,7 @@ function addHoverFrames(scope=document){
  scope.querySelectorAll(selectors).forEach(el=>{el.classList.add('hover-target');if(!el.querySelector(':scope > .hover-border'))el.insertAdjacentHTML('beforeend',frame());});
 }
 /* Display images are independent of the original artwork used by the lightbox. */
-let mediaEpoch=0,mediaObserver=null,videoObserver=null,mediaQueue=[],mediaActive=new Set(),mediaRecords=new WeakMap(),primaryMediaPending=0,primaryReleaseTimer=null,mediaOrdinal=0;
+let mediaEpoch=0,mediaObserver=null,videoObserver=null,mediaQueue=[],mediaActive=new Set(),mediaWaiting=new Set(),mediaRecords=new WeakMap(),primaryMediaPending=0,primaryReleaseTimer=null,mediaOrdinal=0;
 const mediaConcurrency=3;
 function displayMediaSource(url,width){
  const media=RESPONSIVE_MEDIA[url];if(!media)return url;
@@ -2089,8 +2095,8 @@ function carouselImageIsCurrent(img){
 function mediaStats(){window.portfolioMediaState={epoch:mediaEpoch,queued:mediaQueue.length,active:mediaActive.size,primaryPending:primaryMediaPending};}
 function resetMediaLoading(){
  mediaEpoch++;mediaObserver?.disconnect();videoObserver?.disconnect();mediaObserver=null;videoObserver=null;clearTimeout(primaryReleaseTimer);primaryReleaseTimer=null;
- for(const record of [...mediaQueue,...mediaActive])record.cancel?.();
- mediaQueue=[];mediaActive.clear();mediaRecords=new WeakMap();primaryMediaPending=0;mediaOrdinal=0;mediaStats();
+ for(const record of [...mediaQueue,...mediaActive,...mediaWaiting])record.cancel?.();
+ mediaQueue=[];mediaActive.clear();mediaWaiting.clear();mediaRecords=new WeakMap();primaryMediaPending=0;mediaOrdinal=0;mediaStats();
 }
 function imageDisplayWidth(img){return Math.max(1,Math.ceil(img.getBoundingClientRect().width||img.closest('.case-cover,.art-view,.carousel')?.getBoundingClientRect().width||640));}
 function applyDisplayImageSource(img,url){
@@ -2110,19 +2116,29 @@ function pumpMediaQueue(){
 function requestDisplayImage(img,{priority=10,primary=false}={}){
  const url=sourceForImage(img);if(!url||!img.isConnected)return Promise.resolve(false);
  let record=mediaRecords.get(img);
+ if(record?.state==='done'&&img.dataset.mediaState==='error'&&priority<0){mediaRecords.delete(img);record=null;}
  if(record){if(record.state==='queued'){record.priority=Math.min(record.priority,priority);pumpMediaQueue();}return record.promise;}
  const epoch=mediaEpoch;let resolve;const promise=new Promise(done=>resolve=done);
  record={img,url,epoch,priority,primary,order:mediaOrdinal++,state:'queued',promise};mediaRecords.set(img,record);
+ const settle=ok=>{
+  if(record.settled)return;record.settled=true;
+  if(record.primary&&epoch===mediaEpoch){primaryMediaPending=Math.max(0,primaryMediaPending-1);if(!primaryMediaPending){clearTimeout(primaryReleaseTimer);primaryReleaseTimer=null;}}
+  resolve(ok);
+ };
  const finish=ok=>{
   if(record.state==='done'||record.state==='cancelled')return;
-  clearTimeout(record.timeout);img.removeEventListener('load',record.loaded);img.removeEventListener('error',record.failed);mediaActive.delete(record);
-  record.state='done';img.dataset.mediaState=ok?'ready':'error';
-  if(record.primary&&epoch===mediaEpoch){primaryMediaPending=Math.max(0,primaryMediaPending-1);if(!primaryMediaPending){clearTimeout(primaryReleaseTimer);primaryReleaseTimer=null;}}
-  resolve(ok);if(epoch===mediaEpoch)pumpMediaQueue();
+  clearTimeout(record.timeout);img.removeEventListener('load',record.loaded);img.removeEventListener('error',record.failed);mediaActive.delete(record);mediaWaiting.delete(record);
+  record.state='done';img.dataset.mediaState=ok?'ready':'error';settle(ok);if(epoch===mediaEpoch)pumpMediaQueue();
+ };
+ const releaseSlowImage=()=>{
+  if(record.state!=='loading')return;
+  if(img.complete&&img.naturalWidth>0){finish(true);return;}
+  /* Free the request slot, but keep listening: a slow successful image still appears. */
+  mediaActive.delete(record);mediaWaiting.add(record);record.state='waiting';img.dataset.mediaState='waiting';settle(false);if(epoch===mediaEpoch)pumpMediaQueue();
  };
  record.cancel=()=>{
   if(record.state==='done'||record.state==='cancelled')return;
-  record.state='cancelled';clearTimeout(record.timeout);img.removeEventListener('load',record.loaded);img.removeEventListener('error',record.failed);
+  record.state='cancelled';clearTimeout(record.timeout);img.removeEventListener('load',record.loaded);img.removeEventListener('error',record.failed);mediaWaiting.delete(record);
   if(!img.complete){img.removeAttribute('src');img.removeAttribute('srcset');img.removeAttribute('sizes');}
   resolve(false);
  };
@@ -2130,7 +2146,7 @@ function requestDisplayImage(img,{priority=10,primary=false}={}){
   if(epoch!==mediaEpoch||!img.isConnected){record.cancel();mediaActive.delete(record);return;}
   record.state='loading';img.dataset.mediaState='loading';img.loading='eager';img.fetchPriority=record.primary||priority<0?'high':priority>=20?'low':'auto';
   record.loaded=()=>finish(true);record.failed=()=>finish(false);img.addEventListener('load',record.loaded,{once:true});img.addEventListener('error',record.failed,{once:true});
-  record.timeout=setTimeout(()=>finish(img.complete&&img.naturalWidth>0),15000);applyDisplayImageSource(img,url);
+  record.timeout=setTimeout(releaseSlowImage,15000);applyDisplayImageSource(img,url);
   if(img.complete&&img.naturalWidth>0)queueMicrotask(()=>finish(true));
  };
  if(primary)primaryMediaPending++;
