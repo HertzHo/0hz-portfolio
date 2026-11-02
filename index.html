@@ -2031,7 +2031,7 @@ img[data-studio-logo]:not([data-media-state="ready"]){visibility:hidden}
 
 /* Two readable paragraphs are the default: opening statement, then the rest.
    Existing bioParagraphs stay intact so no copy or profile artwork changes. */
-#content #team .person-bio .person-bio-text{margin:0;text-wrap:wrap}
+#content #team .person-bio .person-bio-text{margin:0;text-wrap:pretty}
 #content #team .person-bio .bio-segment,
 #content #team .person-bio .bio-desktop-break{display:inline;margin:0}
 #content #team .person-bio .bio-segment:first-child{display:block;margin-bottom:8px}
@@ -2064,6 +2064,7 @@ img[data-studio-logo]:not([data-media-state="ready"]){visibility:hidden}
 #content .phones-cover>.shared-cover-phone{position:relative;display:block;flex:0 1 auto;width:auto;height:100%;aspect-ratio:520/1000;min-width:0;max-width:none;margin:0;transform:none}
 #content .phones-cover .handset-body{width:100%;height:100%;aspect-ratio:520/1000}
 #content .phones-cover .handset-scroll{overflow:hidden}
+#content .phones-cover .handset-scroll,#content .anniversary-static-grid .handset-scroll{padding-top:11%;background:var(--phone-screen-bg)}
 #content .phones-cover .phone-original-scene{position:relative;display:block;width:100%;min-width:0;overflow:hidden}
 #content .phones-cover .phone-original-scene>img{position:absolute;display:block;max-width:none;max-height:none;object-fit:fill;transform:none}
 #content .phones-cover .handset-overlay{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:fill;pointer-events:none}
@@ -2256,7 +2257,8 @@ function anniversaryScreenContent(item){
 }
 function anniversaryStaticPhone(item,{cover=false}={}){
  const label=item.label||'小程序界面';
- return `<figure class="handset actual-handset handset-dark ${cover?'shared-cover-phone':'anniversary-static-phone'}"><div class="handset-body"><div class="handset-screen"><div class="handset-scroll"${cover?'':` tabindex="0" role="region" aria-label="${esc(label)}，可上下滚动阅读"`}>${anniversaryScreenContent(item)}</div></div>${artImage({art:DATA.phoneFrames.dark,label:''},'loading="lazy" class="handset-overlay" aria-hidden="true"')}</div>${cover?'':`<figcaption>${esc(label)}</figcaption>`}</figure>`;
+ const background={'R24-TENCENT-home':'#3c075f','R24-TENCENT-friends':'#5285ff','R24-TENCENT-live-quiz':'#360157'}[item.art]||'#07121d';
+ return `<figure class="handset actual-handset handset-dark ${cover?'shared-cover-phone':'anniversary-static-phone'}" style="--phone-screen-bg:${background}"><div class="handset-body"><div class="handset-screen"><div class="handset-scroll"${cover?'':` tabindex="0" role="region" aria-label="${esc(label)}，可上下滚动阅读"`}>${anniversaryScreenContent(item)}</div></div>${artImage({art:DATA.phoneFrames.dark,label:''},'loading="lazy" class="handset-overlay" aria-hidden="true"')}</div>${cover?'':`<figcaption>${esc(label)}</figcaption>`}</figure>`;
 }
 function anniversaryCover(c){
  return `<div class="case-cover interface-cover phones-cover" data-cover-case="${esc(c.id)}">${c.cover.slice(0,3).map(item=>anniversaryStaticPhone(item,{cover:true})).join('')}${frame()}</div>`;
